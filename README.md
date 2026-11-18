@@ -1,5 +1,15 @@
 # 🔒 Deadlock Lab - 데드락 실험실
 
+## 상태와 다음 할 일
+
+- 질문: Java에서 데드락은 어떤 코드 모양에서 생기고, Wait-For Graph와 JMX로 어떻게 찾으며, 락 순서 고정 · `tryLock` 타임아웃 · 은행원 알고리즘은 각각 무엇을 깨서 데드락을 막는가.
+- 상태: **학습 예정 · 실측 없음**. 따라 치기 안내서([docs/archive/PHASES.md](docs/archive/PHASES.md))를 따라 코드를 쳐 보며 구조를 배우려고 만든 저장소다. 시나리오 4개 · 탐지기 · 해결책 3개 · 벤치마크 코드는 있지만, 테스트와 Gradle wrapper는 없고 실행 결과 기록도 없다.
+- 이 README의 발생률 · 오버헤드 수치는 예상(실측 아님)이다. 구조와 원문끼리 다른 곳, 아직 없는 것은 [ADR-000](docs/adr/ADR-000-deadlock-lab-structure.md)에 정리했다.
+- 다음 할 일:
+  1. 안내서 순서대로 코드를 함께 읽고, 시나리오마다 해결책 없이 · 적용해 돌린 출력을 남긴다.
+  2. 은행원 알고리즘 설명과 README · 단계 문서끼리 다른 곳을 정리한다([ADR-000 §3 · §4](docs/adr/ADR-000-deadlock-lab-structure.md#4-선택지와-원문끼리-다른-곳)).
+  3. 발생률을 재게 되면 반복 횟수 · 환경 · 원본을 남기고 예상 표를 측정값으로 바꾼다.
+
 Java 동시성 환경에서 Deadlock을 직접 재현하고 해결하며 배우는 프로젝트
 
 ## 📖 프로젝트 소개
@@ -13,12 +23,15 @@ Java 동시성 환경에서 Deadlock을 직접 재현하고 해결하며 배우�
 - **도메인 기반 아키텍처** 적용
 
 ### 주요 특징
-- ✅ 4가지 데드락 시나리오 재현
-- ✅ 데드락 탐지기 (Wait-For Graph) 구현
-- ✅ 락 순서 고정, tryLock, 은행원 알고리즘 구현
-- ✅ 데드락 발생률 측정 및 해결책 효과 검증
-- ✅ 실시간 스레드 상태 시각화
-- ✅ 벤치마크 및 리포트 생성
+
+> 코드가 있는 항목은 "코드 있음"으로 적었다. 실행해서 확인한 기록은 아직 없다. ☐는 아직 하지 않은 항목이다.
+
+- 4가지 데드락 시나리오 재현 — 코드 있음
+- 데드락 탐지기 (Wait-For Graph) 구현 — 코드 있음
+- 락 순서 고정, tryLock, 은행원 알고리즘 구현 — 코드 있음
+- ☐ 데드락 발생률 측정 및 해결책 효과 검증 — 결과 없음
+- 실시간 스레드 상태 시각화 — 코드 있음(`ThreadVisualizer`)
+- 벤치마크 및 리포트 생성 — 벤치마크 코드 있음(`DeadlockBenchmark`), ☐ 리포트 없음
 
 ---
 
@@ -125,6 +138,8 @@ Thread 2: Lock(B) 획득 → Lock(A) 대기 중...
 ---
 
 ## 📁 프로젝트 구조
+
+> 아래 중 `ScenarioService.java`, `SolutionBenchmark.java`, `src/test/`, `results/`는 아직 없다([ADR-000 §7](docs/adr/ADR-000-deadlock-lab-structure.md#7-아직-없는-것)).
 
 ```
 deadlock-lab/
@@ -505,7 +520,9 @@ public class WaitForGraph {
 
 ---
 
-## 📈 예상 실험 결과
+## 📈 예상 실험 결과 (예상 · 실측 아님)
+
+> 아래 두 표는 돌려서 잰 값이 아니라 예상이다. 측정 기록은 아직 없다.
 
 ### 데드락 발생률 (해결책 미적용)
 
@@ -590,6 +607,8 @@ rootProject.name = 'deadlock-lab'
 
 ### 실행 방법
 
+> 아직 없음. Gradle wrapper(`./gradlew`)가 저장소에 없고, 4 · 5번의 `java -cp ... ClassicDeadlockScenario` 명령은 시나리오 클래스에 `main`이 없어서 그대로는 돌지 않는다. 코드에 적힌 진입점은 `DeadlockLabApplication`이고 사용법은 `bootRun --args='<scenario> [--with-solution]'`이다.
+
 ```bash
 # 1. 클론
 git clone https://github.com/junhyeong9812/deadlock-lab.git
@@ -616,6 +635,8 @@ java -cp build/classes/java/main \
 ---
 
 ## 🧪 직접 실험해보기 - 데드락 체험
+
+> 아래 명령과 출력은 예시다(위 실행 방법의 주의와 같다). 실제 실행 출력은 아직 남기지 않았다.
 
 ```bash
 # ⚠️ 주의: 실제로 프로그램이 멈춥니다!
