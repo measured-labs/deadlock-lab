@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: deadlock-lab
+  main:
+    banner-mode: off
+
+logging:
+  level:
+    root: INFO
+    com.experiment.deadlocklab: DEBUG
